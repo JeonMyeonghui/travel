@@ -61,7 +61,16 @@ io.on('connection', (socket) => {
   console.log('User connected:', socket.id);
 
   // 방 접속 (가이드 or 관광객)
-  socket.on('join-room', ({ roomId, role }) => {
+  socket.on('join-room', ({ roomId, role, password }) => {
+    // 가이드인 경우 비밀번호 검증
+    if (role === 'guide') {
+      const expectedPassword = process.env.GUIDE_PASSWORD || 'jmh17300$#@!';
+      if (password !== expectedPassword) {
+        socket.emit('auth-error', '비밀번호가 일치하지 않습니다.');
+        return; // 방 접속 차단
+      }
+    }
+
     socket.join(roomId);
     socket.roomId = roomId;
     socket.role = role;

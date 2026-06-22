@@ -8,12 +8,22 @@ const btnStop = document.getElementById('btn-stop');
 const inputRoomId = document.getElementById('room-id');
 const statusText = document.getElementById('status-text');
 const micStatus = document.getElementById('mic-status');
+const inputPassword = document.getElementById('guide-password');
+
+// 서버로부터 에러(비밀번호 틀림 등) 수신 시 처리
+socket.on('auth-error', (msg) => {
+  alert(msg);
+  btnStop.click(); // 강제 종료 처리
+});
 
 btnStart.addEventListener('click', async () => {
   const roomId = inputRoomId.value.trim();
+  const password = inputPassword.value.trim();
+  
   if (!roomId) return alert('방 번호를 입력하세요.');
+  if (!password) return alert('가이드 비밀번호를 입력하세요.');
 
-  socket.emit('join-room', { roomId, role: 'guide' });
+  socket.emit('join-room', { roomId, role: 'guide', password });
 
   try {
     mediaStream = await navigator.mediaDevices.getUserMedia({ audio: true });
@@ -55,6 +65,7 @@ btnStart.addEventListener('click', async () => {
     btnStart.style.display = 'none';
     btnStop.style.display = 'inline-block';
     inputRoomId.disabled = true;
+    inputPassword.disabled = true;
     statusText.textContent = `방송 중... (방 번호: ${roomId})`;
   } catch (err) {
     console.error(err);
@@ -70,6 +81,7 @@ btnStop.addEventListener('click', () => {
   btnStart.style.display = 'inline-block';
   btnStop.style.display = 'none';
   inputRoomId.disabled = false;
+  inputPassword.disabled = false;
   statusText.textContent = '방송 종료';
   micStatus.style.background = '#ccc';
 });
