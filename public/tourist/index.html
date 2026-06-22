@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Local Voice - 관광객 (수신용)</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Pretendard:wght@400;600;700&display=swap');
+    
+    body {
+      font-family: 'Pretendard', -apple-system, sans-serif;
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, #00c6ff 0%, #0072ff 100%);
+      color: #fff;
+    }
+
+    .glass-card {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      padding: 2.5rem 2rem;
+      border-radius: 24px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+      text-align: center;
+      max-width: 400px;
+      width: 90%;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    h1 {
+      margin-top: 0;
+      font-size: 2rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+    }
+
+    p {
+      color: #d1d5db;
+      font-size: 1rem;
+      margin-bottom: 2rem;
+      line-height: 1.5;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 15px;
+      margin-bottom: 1rem;
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      border-radius: 12px;
+      box-sizing: border-box;
+      font-size: 1.1rem;
+      font-weight: 600;
+      text-align: center;
+      color: #fff;
+      outline: none;
+      transition: border-color 0.3s;
+    }
+
+    select option {
+      background: #1e3c72;
+      color: white;
+    }
+
+    input:focus, select:focus {
+      border-color: #00f2fe;
+      background: rgba(255, 255, 255, 0.15);
+    }
+
+    input::placeholder {
+      color: rgba(255, 255, 255, 0.5);
+    }
+
+    .toggles-container {
+      display: flex;
+      justify-content: space-around;
+      margin-bottom: 1.5rem;
+      font-size: 1rem;
+      color: #fff;
+      background: rgba(255, 255, 255, 0.1);
+      padding: 10px;
+      border-radius: 12px;
+    }
+
+    .toggle-label {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      cursor: pointer;
+    }
+
+    input[type="checkbox"] {
+      width: auto;
+      accent-color: #00f2fe;
+      transform: scale(1.2);
+      cursor: pointer;
+    }
+
+    button {
+      background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+      color: white;
+      border: none;
+      padding: 15px 24px;
+      border-radius: 12px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      cursor: pointer;
+      width: 100%;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 4px 15px rgba(0, 242, 254, 0.3);
+    }
+
+    button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(0, 242, 254, 0.4);
+    }
+
+    button.stop {
+      background: linear-gradient(135deg, #ff0844 0%, #ffb199 100%);
+      box-shadow: 0 4px 15px rgba(255, 8, 68, 0.3);
+    }
+
+    button.stop:hover {
+      box-shadow: 0 6px 20px rgba(255, 8, 68, 0.4);
+    }
+
+    .status {
+      margin-top: 1.5rem;
+      font-size: 1rem;
+      color: #d1d5db;
+    }
+
+    #subtitle-box {
+      margin-top: 1.5rem;
+      padding: 15px;
+      background: rgba(0, 0, 0, 0.3);
+      border-radius: 12px;
+      min-height: 50px;
+      text-align: left;
+      font-size: 1.1rem;
+      color: #fff;
+      display: none;
+      border-left: 4px solid #00f2fe;
+      backdrop-filter: blur(5px);
+    }
+
+    .playing-indicator {
+      display: none;
+      margin-top: 15px;
+    }
+
+    .bar {
+      width: 6px;
+      height: 20px;
+      background: #00f2fe;
+      display: inline-block;
+      margin: 0 3px;
+      border-radius: 3px;
+      animation: bounce 1s infinite alternate;
+    }
+
+    .bar:nth-child(2) { animation-delay: 0.2s; }
+    .bar:nth-child(3) { animation-delay: 0.4s; }
+    @keyframes bounce { to { height: 40px; } }
+  </style>
+  <script src="/socket.io/socket.io.js"></script>
+</head>
+<body>
+  <div class="glass-card">
+    <h1>🎧 통역 수신</h1>
+    <p>가이드가 알려준 방 번호와 듣고 싶은 언어를 선택하세요.</p>
+    
+    <input type="text" id="room-id" placeholder="방 번호 (예: 1234)" value="1234">
+    <select id="language-select">
+      <option value="ko">한국어 (Korean)</option>
+      <option value="en" selected>영어 (English)</option>
+      <option value="ja">일본어 (Japanese)</option>
+      <option value="zh">중국어 (Chinese)</option>
+      <option value="es">스페인어 (Spanish)</option>
+      <option value="fr">프랑스어 (French)</option>
+    </select>
+    
+    <div class="toggles-container">
+      <label class="toggle-label"><input type="checkbox" id="toggle-voice" checked> 음성 출력</label>
+      <label class="toggle-label"><input type="checkbox" id="toggle-subtitle" checked> 자막 표시</label>
+    </div>
+
+    <button id="btn-connect">접속 및 통역 시작</button>
+    <button id="btn-disconnect" class="stop" style="display: none;">연결 해제</button>
+
+    <div class="status" id="status-text">대기 중...</div>
+    <div id="subtitle-box"></div>
+    <div class="playing-indicator" id="playing-indicator">
+      <div class="bar"></div>
+      <div class="bar"></div>
+      <div class="bar"></div>
+      <p style="font-size: 13px; margin-top: 8px; color: #d1d5db;">통역 오디오 수신 중...</p>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,19 @@
+{
+  "name": "local-voice",
+  "version": "1.0.0",
+  "description": "Local Voice - Realtime Translation Platform",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@google/genai": "^2.9.0",
+    "cors": "^2.8.6",
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1",
+    "socket.io": "^4.8.3"
+  }
+}

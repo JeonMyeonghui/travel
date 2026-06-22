@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Local Voice - 실시간 다국어 통역</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Pretendard:wght@400;600;700&display=swap');
+    
+    body {
+      font-family: 'Pretendard', -apple-system, sans-serif;
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+      color: #333;
+    }
+
+    .glass-card {
+      background: rgba(255, 255, 255, 0.9);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      padding: 3rem 2rem;
+      border-radius: 24px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+      text-align: center;
+      max-width: 480px;
+      width: 90%;
+      border: 1px solid rgba(255, 255, 255, 0.5);
+    }
+
+    h1 {
+      margin-top: 0;
+      color: #1a73e8;
+      font-size: 2.2rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+    }
+
+    p {
+      color: #5f6368;
+      font-size: 1.1rem;
+      margin-bottom: 2.5rem;
+      line-height: 1.5;
+    }
+
+    .button-group {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .btn {
+      text-decoration: none;
+      padding: 1.2rem;
+      border-radius: 16px;
+      font-size: 1.2rem;
+      font-weight: 600;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    .btn-guide {
+      background: #1a73e8;
+      color: white;
+      box-shadow: 0 4px 15px rgba(26, 115, 232, 0.3);
+    }
+
+    .btn-guide:hover {
+      background: #1557b0;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(26, 115, 232, 0.4);
+    }
+
+    .btn-tourist {
+      background: white;
+      color: #1a73e8;
+      border: 2px solid #1a73e8;
+    }
+
+    .btn-tourist:hover {
+      background: #f8fbff;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(26, 115, 232, 0.15);
+    }
+
+    .emoji {
+      font-size: 1.4rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="glass-card">
+    <h1>Local Voice</h1>
+    <p>네트워크만 연결되어 있다면 어디서든.<br>내 폰이 글로벌 마이크와 이어폰이 됩니다.</p>
+    
+    <div class="button-group">
+      <a href="/guide/" class="btn btn-guide">
+        <span class="emoji">🎙️</span> 나는 설명하는 가이드입니다
+      </a>
+      <a href="/tourist/" class="btn btn-tourist">
+        <span class="emoji">🎧</span> 나는 번역을 듣고 싶습니다
+      </a>
+    </div>
+  </div>
+</body>
+</html>
